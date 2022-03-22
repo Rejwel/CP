@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace concurrent_programming
 {
     [TestClass]
-    public class UnitTest1
+    public class CalculatorTests
     {
         Calculator calculator = new Calculator();
 
