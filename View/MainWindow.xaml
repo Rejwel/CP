@@ -5,12 +5,12 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:View" xmlns:viewmodel="clr-namespace:ViewModel;assembly=ViewModel"
         mc:Ignorable="d"
-        Title="MainWindow" d:DesignHeight="720" d:DesignWidth="1280">
+        Title="MainWindow" d:DesignHeight="720" d:DesignWidth="1280" ResizeMode="NoResize">
     <Window.DataContext>
         <viewmodel:PoolViewModel/>
     </Window.DataContext>
     <Grid>
-        <ItemsControl ItemsSource="{Binding Circles}" Width="{Binding WindowWidth}" Height="644" Margin="25,10,25,0" VerticalAlignment="Top">
+        <ItemsControl ItemsSource="{Binding Circles}" Width="{Binding WindowWidth}" Height="{Binding WindowHeight}" Margin="25,10,25,0" VerticalAlignment="Top">
             <ItemsControl.ItemsPanel>
                 <ItemsPanelTemplate>
                     <Canvas Background="#FFBBBBBB"/>
