@@ -1,6 +1,5 @@
 ﻿using Logic;
-using Presentation.Base;
-using Presentation.Model;
+using Model;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -9,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Presentation.ViewModel
+namespace ViewModel
 {
     public class PoolViewModel : ViewModelBase
     {

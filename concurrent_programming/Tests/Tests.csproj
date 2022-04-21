@@ -15,9 +15,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Model\Model.csproj" />
+    <ProjectReference Include="..\..\ViewModel\ViewModel.csproj" />
+    <ProjectReference Include="..\..\View\View.csproj" />
     <ProjectReference Include="..\Data\Data.csproj" />
     <ProjectReference Include="..\Logic\Logic.csproj" />
-    <ProjectReference Include="..\Presentation\Presentation.csproj" />
   </ItemGroup>
 
 </Project>
