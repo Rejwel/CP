@@ -6,14 +6,14 @@ using System.Collections.ObjectModel;
 namespace Tests
 {
     [TestClass]
-    internal class PoolAPITest
+    public class PoolAPITest
     {
-        PoolAbstractAPI _poolAPI = PoolAbstractAPI.CreateLayer();
+        PoolAbstractAPI _poolAPI = PoolAbstractAPI.CreateLayer(null);
 
         [TestMethod]
         public void CreateLayerNullTest()
         {
-            Assert.AreEqual(_poolAPI, PoolAbstractAPI.CreateLayer(null));
+            Assert.AreEqual(_poolAPI.GetType(), PoolAbstractAPI.CreateLayer(null).GetType());
         }
 
         DataAbstractAPI _layer = DataAbstractAPI.CreateAPI();
@@ -22,7 +22,7 @@ namespace Tests
         [TestMethod]
         public void CreateLayerTest()
         {
-            Assert.AreEqual(_poolAPI, PoolAbstractAPI.CreateLayer(_layer));
+            Assert.AreEqual(_poolAPI.GetType(), PoolAbstractAPI.CreateLayer(_layer).GetType());
         }
 
         ObservableCollection<Circle> _newCircles = new();
