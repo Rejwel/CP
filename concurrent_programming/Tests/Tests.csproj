@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net6.0-windows</TargetFramework>
     <Nullable>enable</Nullable>
 
     <IsPackable>false</IsPackable>
@@ -15,12 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Reference Include="Data">
-      <HintPath>..\Data\bin\Debug\net6.0-windows\Data.dll</HintPath>
-    </Reference>
-    <Reference Include="Logic">
-      <HintPath>..\Logic\bin\Debug\net6.0-windows\Logic.dll</HintPath>
-    </Reference>
+    <ProjectReference Include="..\Data\Data.csproj" />
+    <ProjectReference Include="..\Logic\Logic.csproj" />
+    <ProjectReference Include="..\Presentation\Presentation.csproj" />
   </ItemGroup>
 
 </Project>
