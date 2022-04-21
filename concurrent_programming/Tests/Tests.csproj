@@ -18,6 +18,9 @@
     <Reference Include="Data">
       <HintPath>..\Data\bin\Debug\net6.0-windows\Data.dll</HintPath>
     </Reference>
+    <Reference Include="Logic">
+      <HintPath>..\Logic\bin\Debug\net6.0-windows\Logic.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

@@ -8,7 +8,7 @@ namespace Tests
         
 
         [TestMethod]
-        public void ConnectTest()
+        public void ConnectExceptionTest()
         {
             Assert.ThrowsException<System.NotImplementedException>(() => Data.DataAbstractAPI.CreateAPI().Connect());
         }
