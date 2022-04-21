@@ -6,7 +6,6 @@ namespace Tests
     public class DataAbstractAPITest
     {
         
-
         [TestMethod]
         public void ConnectExceptionTest()
         {
