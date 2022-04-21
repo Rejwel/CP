@@ -24,11 +24,11 @@ namespace Logic
             this.Color = String.Format("#{0:X6}", rnd.Next(0x1000000));
             while (XSpeed == 0)
             {
-                XSpeed = rnd.Next(-1, 2);
+                XSpeed = rnd.Next(-5, 6);
             }
             while (YSpeed == 0)
             {
-                YSpeed = rnd.Next(-1, 2);
+                YSpeed = rnd.Next(-5, 6);
             }
         }
     }
