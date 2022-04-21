@@ -1,4 +1,5 @@
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Data;
 
 namespace Tests
 {
@@ -9,7 +10,7 @@ namespace Tests
         [TestMethod]
         public void ConnectExceptionTest()
         {
-            Assert.ThrowsException<System.NotImplementedException>(() => Data.DataAbstractAPI.CreateAPI().Connect());
+            Assert.ThrowsException<System.NotImplementedException>(() => DataAbstractAPI.CreateAPI().Connect());
         }
     }
 }
