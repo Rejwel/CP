@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    internal class Circle
+    public class Circle
     {
         public int Radius { get; }
         public double XPos { get; set; }
