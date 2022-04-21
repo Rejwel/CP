@@ -15,8 +15,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Data\Data.csproj" />
-    <ProjectReference Include="..\Logic\Logic.csproj" />
+    <Reference Include="Data">
+      <HintPath>..\Data\bin\Debug\net6.0-windows\Data.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>
