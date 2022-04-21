@@ -12,20 +12,20 @@ namespace Presentation.Base
         public CommandBase(Action execute) : this(execute, null) { }
         public CommandBase(Action execute, Func<bool> canExecute)
         {
-            m_Execute = execute ?? throw new ArgumentNullException(nameof(execute));
-            m_CanExecute = canExecute;
+            _execute = execute ?? throw new ArgumentNullException(nameof(execute));
+            _canExecute = canExecute;
         }
         public bool CanExecute(object parameter)
         {
-            if (m_CanExecute == null)
+            if (_canExecute == null)
                 return true;
             if (parameter == null)
-                return m_CanExecute();
-            return m_CanExecute();
+                return _canExecute();
+            return _canExecute();
         }
         public virtual void Execute(object parameter)
         {
-            m_Execute();
+            _execute();
         }
         public event EventHandler? CanExecuteChanged;
 
@@ -34,8 +34,8 @@ namespace Presentation.Base
             CanExecuteChanged?.Invoke(this, EventArgs.Empty);
         }
 
-        private readonly Action m_Execute;
-        private readonly Func<bool> m_CanExecute;
+        private readonly Action _execute;
+        private readonly Func<bool> _canExecute;
 
     }
 }
