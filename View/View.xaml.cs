@@ -13,14 +13,14 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
-namespace Presentation.View
+namespace View
 {
     /// <summary>
-    /// Interaction logic for PoolView.xaml
+    /// Interaction logic for View.xaml
     /// </summary>
-    public partial class PoolView : UserControl
+    public partial class View : UserControl
     {
-        public PoolView()
+        public View()
         {
             InitializeComponent();
         }

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
 
-namespace Presentation.Base
+namespace ViewModel
 {
     public class CommandBase : ICommand
     {
