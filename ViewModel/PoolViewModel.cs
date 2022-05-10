@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Threading;
 
 namespace ViewModel
 {
@@ -37,20 +38,22 @@ namespace ViewModel
 
         private async void Start()
         {
-            Circles = PoolModel.GetStartingCirclePositions(Count);
+            _circles = PoolModel.GetStartingCirclePositions(Count);
             while (PoolModel.Animating)
             {
                 await Task.Delay(15);
-                Circles = PoolModel.MoveCircle(_circles);
+                Circles = new ObservableCollection<Circle>(_circles);
             }
         }
 
         private void Stop()
         {
             PoolModel.Animating = false;
+            PoolModel.InterruptThreads();
         }
 
         private ObservableCollection<Circle> _circles;
+        private ObservableCollection<Circle> _circles2;
         public ObservableCollection<Circle> Circles
         {
             get => _circles;

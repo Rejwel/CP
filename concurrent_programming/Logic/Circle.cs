@@ -15,6 +15,8 @@ namespace Logic
         public int XSpeed { get; set; }
         public int YSpeed { get; set; }
 
+        public double Mass { get; set; }
+
         public Circle(int Radius, double XPos, double YPos)
         {
             Random rnd = new();
@@ -22,6 +24,7 @@ namespace Logic
             this.XPos = XPos;
             this.YPos = YPos;
             this.Color = String.Format("#{0:X6}", rnd.Next(0x1000000));
+            this.Mass = 5.0;
             while (XSpeed == 0)
             {
                 XSpeed = rnd.Next(-5, 6);

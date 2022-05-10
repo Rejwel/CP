@@ -20,12 +20,12 @@ namespace Model
         public ObservableCollection<Circle> GetStartingCirclePositions(int circleCount)
         {
             Animating = true;
-            return PoolAPI.CreateCircles(_canvasWidth, _canvasHeight, circleCount);
+            return PoolAPI.CreateCircles(_canvasWidth, _canvasHeight, circleCount); ;
         }
 
-        public ObservableCollection<Circle> MoveCircle(ObservableCollection<Circle> circles)
+        public void InterruptThreads()
         {
-            return PoolAPI.UpdateCirlcePosition(_canvasWidth, _canvasHeight, circles);
+            PoolAPI.InterruptThreads();
         }
 
         private bool _animating;

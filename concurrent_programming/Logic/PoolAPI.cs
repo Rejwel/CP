@@ -1,6 +1,8 @@
 ﻿using Data;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Threading;
 
 namespace Logic
 {
@@ -12,7 +14,9 @@ namespace Logic
         }
 
         public abstract ObservableCollection<Circle> CreateCircles(double poolWidth, double poolHeight, int circleCount);
-        public abstract ObservableCollection<Circle> UpdateCirlcePosition(double poolWidth, double poolHeight, ObservableCollection<Circle> circles);
+        public abstract void UpdateCirlcePosition(double poolWidth, double poolHeight, Circle circles);
+
+        public abstract void InterruptThreads();
 
         private class PoolAPI : PoolAbstractAPI
         {
@@ -29,25 +33,78 @@ namespace Logic
                 {
                     Circle circle = new(rnd.Next(5, 10), rnd.Next(20, (int)poolWidth - 20), rnd.Next(20, (int)poolHeight - 20));
                     circles.Add(circle);
+                    circlesCollection.Add(circle);
+                    Thread t = new Thread(() =>
+                    {
+                        while (true)
+                        {
+                            try
+                            {
+                                Thread.Sleep(15);
+                                lock (circlesCollection)
+                                {
+                                    CirclesCollision(circle);
+                                }
+                                UpdateCirlcePosition(poolWidth, poolHeight, circle);
+                            } catch ( Exception e)
+                            {
+                                break;
+                            }
+                        }
+
+                    });
+                    Threads.Add(t);
                 }
+                StartThreads();
                 return circles;
             }
 
-            public override ObservableCollection<Circle> UpdateCirlcePosition(double poolWidth, double poolHeight, ObservableCollection<Circle> circles)
+            public void StartThreads()
             {
-                ObservableCollection<Circle> newCircles = new();
-                foreach (Circle circle in circles)
+                foreach(Thread t in Threads)
                 {
+                    t.Start();
+                }
+            }
+
+            public override void InterruptThreads()
+            {
+                foreach (Thread t in Threads)
+                {
+                    t.Interrupt();
+                }
+                Threads = new();
+            }
+
+            private bool CirclesCollision(Circle circle)
+            {
+                foreach(Circle c in circlesCollection)
+                {
+                    double distance = Math.Sqrt(Math.Pow((c.XPos - circle.XPos),2) + Math.Pow((c.YPos - circle.YPos),2));
+                    if(c != circle && distance < (c.Radius + circle.Radius))
+                    {
+                        circle.XSpeed *= -1;
+                        circle.YSpeed *= -1;
+                        c.XSpeed *= -1;
+                        c.YSpeed *= -1;
+                        return true;
+                    }
+                }
+                return false;
+            }
+
+            public override void UpdateCirlcePosition(double poolWidth, double poolHeight, Circle circle)
+            {
                     if (circle.XPos + circle.Radius + 1 > poolWidth || circle.XPos - circle.Radius - 1 < 0) circle.XSpeed *= -1;
                     if (circle.YPos + circle.Radius + 1 > poolHeight || circle.YPos - circle.Radius - 1 < 0) circle.YSpeed *= -1;
                     circle.XPos += circle.XSpeed;
                     circle.YPos += circle.YSpeed;
-                    newCircles.Add(circle);
-                }
-                return newCircles;
+            
             }
 
             private readonly DataAbstractAPI DataLayer;
+            private Collection<Thread> Threads = new();
+            private Collection<Circle> circlesCollection = new();
         }
     }
 }
