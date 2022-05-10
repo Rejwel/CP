@@ -41,7 +41,7 @@ namespace ViewModel
             _circles = PoolModel.GetStartingCirclePositions(Count);
             while (PoolModel.Animating)
             {
-                await Task.Delay(15);
+                await Task.Delay(10);
                 Circles = new ObservableCollection<Circle>(_circles);
             }
         }

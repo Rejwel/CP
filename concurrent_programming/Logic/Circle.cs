@@ -27,11 +27,11 @@ namespace Logic
             this.Mass = 5.0;
             while (XSpeed == 0)
             {
-                XSpeed = rnd.Next(-5, 6);
+                XSpeed = rnd.Next(-3, 4);
             }
             while (YSpeed == 0)
             {
-                YSpeed = rnd.Next(-5, 6);
+                YSpeed = rnd.Next(-3, 4);
             }
         }
     }

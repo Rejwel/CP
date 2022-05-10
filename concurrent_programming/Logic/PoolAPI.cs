@@ -31,7 +31,7 @@ namespace Logic
                 Random rnd = new();
                 for (int i = 0; i < circleCount; i++)
                 {
-                    Circle circle = new(rnd.Next(5, 10), rnd.Next(20, (int)poolWidth - 20), rnd.Next(20, (int)poolHeight - 20));
+                    Circle circle = new(rnd.Next(20, 25), rnd.Next(40, (int)poolWidth - 40), rnd.Next(40, (int)poolHeight - 40));
                     circles.Add(circle);
                     circlesCollection.Add(circle);
                     Thread t = new Thread(() =>
@@ -40,7 +40,7 @@ namespace Logic
                         {
                             try
                             {
-                                Thread.Sleep(15);
+                                Thread.Sleep(10);
                                 lock (circlesCollection)
                                 {
                                     CirclesCollision(circle);
@@ -80,13 +80,11 @@ namespace Logic
             {
                 foreach(Circle c in circlesCollection)
                 {
-                    double distance = Math.Sqrt(Math.Pow((c.XPos - circle.XPos),2) + Math.Pow((c.YPos - circle.YPos),2));
-                    if(c != circle && distance < (c.Radius + circle.Radius))
+                    double distance = Math.Ceiling(Math.Sqrt(Math.Pow((c.XPos - circle.XPos),2) + Math.Pow((c.YPos - circle.YPos),2)));
+                    if(c != circle && distance <= (c.Radius + circle.Radius))
                     {
                         circle.XSpeed *= -1;
                         circle.YSpeed *= -1;
-                        c.XSpeed *= -1;
-                        c.YSpeed *= -1;
                         return true;
                     }
                 }
