@@ -31,7 +31,12 @@ namespace Logic
                 Random rnd = new();
                 for (int i = 0; i < circleCount; i++)
                 {
-                    Circle circle = new(rnd.Next(20, 25), rnd.Next(40, (int)poolWidth - 40), rnd.Next(40, (int)poolHeight - 40));
+                    int randomCircleRadius = rnd.Next(20, 25);
+                    Circle circle = new(randomCircleRadius, rnd.Next(randomCircleRadius + 1, (int)poolWidth - randomCircleRadius - 1), rnd.Next(randomCircleRadius + 1, (int)poolHeight - randomCircleRadius - 1));
+                    while (!CheckStartingPosition(poolWidth, poolHeight, circle))
+                    {
+                        circle = new(randomCircleRadius, rnd.Next(randomCircleRadius + 1, (int)poolWidth - randomCircleRadius - 1), rnd.Next(randomCircleRadius + 1, (int)poolHeight - randomCircleRadius - 1));
+                    }
                     circles.Add(circle);
                     circlesCollection.Add(circle);
                     Thread t = new Thread(() =>
@@ -43,7 +48,7 @@ namespace Logic
                                 Thread.Sleep(10);
                                 lock (circlesCollection)
                                 {
-                                    CirclesCollision(circle);
+                                    CirclesCollision(poolWidth, poolHeight, circle);
                                 }
                                 UpdateCirlcePosition(poolWidth, poolHeight, circle);
                             } catch ( Exception e)
@@ -51,7 +56,6 @@ namespace Logic
                                 break;
                             }
                         }
-
                     });
                     Threads.Add(t);
                 }
@@ -76,12 +80,12 @@ namespace Logic
                 Threads = new();
             }
 
-            private bool CirclesCollision(Circle circle)
+            private bool CirclesCollision(double poolWidth, double poolHeight, Circle circle)
             {
                 foreach(Circle c in circlesCollection)
                 {
                     double distance = Math.Ceiling(Math.Sqrt(Math.Pow((c.XPos - circle.XPos),2) + Math.Pow((c.YPos - circle.YPos),2)));
-                    if(c != circle && distance <= (c.Radius + circle.Radius))
+                    if(c != circle && distance <= (c.Radius + circle.Radius) && checkCircleBoundary(poolWidth, poolHeight, circle))
                     {
                         circle.XSpeed *= -1;
                         circle.YSpeed *= -1;
@@ -91,13 +95,42 @@ namespace Logic
                 return false;
             }
 
+            private bool CheckStartingPosition(double poolWidth, double poolHeight, Circle circle)
+            {
+                if (circlesCollection.Count == 0) return true;
+                foreach (Circle c in circlesCollection)
+                {
+                    double distance = Math.Sqrt(Math.Pow((c.XPos - circle.XPos), 2) + Math.Pow((c.YPos - circle.YPos), 2));
+                    if (distance <= (c.Radius + circle.Radius + 5))
+                    {
+                        return false;
+                    }
+                }
+                return true;
+            }
+
             public override void UpdateCirlcePosition(double poolWidth, double poolHeight, Circle circle)
             {
-                    if (circle.XPos + circle.Radius + 1 > poolWidth || circle.XPos - circle.Radius - 1 < 0) circle.XSpeed *= -1;
-                    if (circle.YPos + circle.Radius + 1 > poolHeight || circle.YPos - circle.Radius - 1 < 0) circle.YSpeed *= -1;
+                    UpdateCircleSpeed(poolWidth, poolHeight, circle);
                     circle.XPos += circle.XSpeed;
                     circle.YPos += circle.YSpeed;
-            
+            }
+
+            private void UpdateCircleSpeed(double poolWidth, double poolHeight, Circle circle)
+            {
+                if (circle.YPos - circle.Radius <= 0 || circle.YPos + circle.Radius >= poolHeight) 
+                {
+                    circle.YSpeed *= -1;
+                }
+                if (circle.XPos + circle.Radius >= poolWidth || circle.XPos - circle.Radius <= 0)
+                {
+                    circle.XSpeed *= -1;
+                }
+            }
+
+            private bool checkCircleBoundary(double poolWidth, double poolHeight, Circle circle)
+            {
+                return circle.YPos - circle.Radius <= 0 || circle.XPos + circle.Radius >= poolWidth || circle.YPos + circle.Radius >= poolHeight || circle.XPos - circle.Radius <= 0 ? false : true;
             }
 
             private readonly DataAbstractAPI DataLayer;
