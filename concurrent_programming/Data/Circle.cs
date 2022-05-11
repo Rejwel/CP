@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
-namespace Logic
+namespace Data
 {
     public class Circle
     {
@@ -17,10 +17,12 @@ namespace Logic
 
         public double Mass { get; set; }
 
-        public Circle(int Radius, double XPos, double YPos)
+        public Thread Thread { get; set; }
+
+        public Circle( double XPos, double YPos)
         {
             Random rnd = new();
-            this.Radius = Radius;
+            this.Radius = 5;
             this.XPos = XPos;
             this.YPos = YPos;
             this.Color = String.Format("#{0:X6}", rnd.Next(0x1000000));
@@ -33,6 +35,22 @@ namespace Logic
             {
                 YSpeed = rnd.Next(-3, 4);
             }
+        }
+
+        public void Move()
+        {
+            this.XPos += this.XSpeed;
+            this.YPos += this.YSpeed;
+        }
+
+        public void ChangeDirectionX()
+        {
+            this.XSpeed *= -1;
+        }
+
+        public void ChangeDirectionY()
+        {
+            this.YSpeed *= -1;
         }
     }
 }

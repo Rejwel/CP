@@ -17,7 +17,7 @@ namespace Model
             PoolAPI = poolAPI ?? PoolAbstractAPI.CreateLayer();
         }
 
-        public ObservableCollection<Circle> GetStartingCirclePositions(int circleCount)
+        public ObservableCollection<LogicCircle> GetStartingCirclePositions(int circleCount)
         {
             Animating = true;
             return PoolAPI.CreateCircles(_canvasWidth, _canvasHeight, circleCount); ;

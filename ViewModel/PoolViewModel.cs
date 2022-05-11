@@ -15,7 +15,7 @@ namespace ViewModel
     {
         public PoolViewModel()
         {
-            _circles = new();
+            viewModelCircles = new();
             WindowHeight = 640;
             WindowWidth = 1230;
             PoolModel = new PoolModel(WindowWidth, WindowHeight);
@@ -38,11 +38,14 @@ namespace ViewModel
 
         private async void Start()
         {
-            _circles = PoolModel.GetStartingCirclePositions(Count);
+            foreach(LogicCircle logicCircle in PoolModel.GetStartingCirclePositions(Count))
+            {
+                viewModelCircles.Add(new ModelCircle(logicCircle.GetX(),logicCircle.GetY(),logicCircle.GetRadius(),logicCircle));
+            }
             while (PoolModel.Animating)
             {
                 await Task.Delay(10);
-                Circles = new ObservableCollection<Circle>(_circles);
+                Circles = new ObservableCollection<ModelCircle>(viewModelCircles);
             }
         }
 
@@ -52,14 +55,13 @@ namespace ViewModel
             PoolModel.InterruptThreads();
         }
 
-        private ObservableCollection<Circle> _circles;
-        private ObservableCollection<Circle> _circles2;
-        public ObservableCollection<Circle> Circles
+        private ObservableCollection<ModelCircle> viewModelCircles;
+        public ObservableCollection<ModelCircle> Circles
         {
-            get => _circles;
+            get => viewModelCircles;
             set
             {
-                _circles = value;
+                viewModelCircles = value;
                 OnPropertyChanged(nameof(Circles));
             }
         }

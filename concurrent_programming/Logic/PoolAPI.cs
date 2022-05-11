@@ -13,8 +13,8 @@ namespace Logic
             return new PoolAPI(data ?? DataAbstractAPI.CreateAPI());
         }
 
-        public abstract ObservableCollection<Circle> CreateCircles(double poolWidth, double poolHeight, int circleCount);
-        public abstract void UpdateCirlcePosition(double poolWidth, double poolHeight, Circle circles);
+        public abstract ObservableCollection<LogicCircle> CreateCircles(double poolWidth, double poolHeight, int circleCount);
+        public abstract void UpdateCircleSpeed(LogicCircle logicCircle);
 
         public abstract void InterruptThreads();
 
@@ -25,117 +25,60 @@ namespace Logic
                 DataLayer = dataLayer;
             }
 
-            public override ObservableCollection<Circle> CreateCircles(double poolWidth, double poolHeight, int circleCount)
+            public override ObservableCollection<LogicCircle> CreateCircles(double poolWidth, double poolHeight, int circleCount)
             {
-                ObservableCollection<Circle> circles = new();
-                Random rnd = new();
-                for (int i = 0; i < circleCount; i++)
+                List<Circle> circles = new();
+                ObservableCollection<LogicCircle> logicCircles = new();
+                DataLayer.CreatePoolWithBalls(circleCount, poolWidth, poolHeight);
+                circles = DataLayer.GetCircles();
+                foreach (Circle c in circles)
                 {
-                    int randomCircleRadius = rnd.Next(20, 25);
-                    Circle circle = new(randomCircleRadius, rnd.Next(randomCircleRadius + 1, (int)poolWidth - randomCircleRadius - 1), rnd.Next(randomCircleRadius + 1, (int)poolHeight - randomCircleRadius - 1));
-                    while (!CheckStartingPosition(poolWidth, poolHeight, circle))
-                    {
-                        circle = new(randomCircleRadius, rnd.Next(randomCircleRadius + 1, (int)poolWidth - randomCircleRadius - 1), rnd.Next(randomCircleRadius + 1, (int)poolHeight - randomCircleRadius - 1));
-                    }
-                    circles.Add(circle);
-                    circlesCollection.Add(circle);
-                    Thread t = new Thread(() =>
-                    {
-                        while (true)
-                        {
-                            try
-                            {
-                                Thread.Sleep(10);
-                                lock (circlesCollection)
-                                {
-                                    CirclesCollision(poolWidth, poolHeight, circle);
-                                }
-                                UpdateCirlcePosition(poolWidth, poolHeight, circle);
-                            } catch ( Exception e)
-                            {
-                                break;
-                            }
-                        }
-                    });
-                    Threads.Add(t);
+                    LogicCircle logicCircle = new LogicCircle(c);
+                    circlesCollection.Add(logicCircle);
+                    logicCircles.Add(logicCircle);                
                 }
-                StartThreads();
-                return circles;
+                return logicCircles;
             }
 
-            public void StartThreads()
+            private bool CirclesCollision(double poolWidth, double poolHeight, LogicCircle circle)
             {
-                foreach(Thread t in Threads)
+                foreach (LogicCircle c in circlesCollection)
                 {
-                    t.Start();
-                }
-            }
-
-            public override void InterruptThreads()
-            {
-                foreach (Thread t in Threads)
-                {
-                    t.Interrupt();
-                }
-                Threads = new();
-            }
-
-            private bool CirclesCollision(double poolWidth, double poolHeight, Circle circle)
-            {
-                foreach(Circle c in circlesCollection)
-                {
-                    double distance = Math.Ceiling(Math.Sqrt(Math.Pow((c.XPos - circle.XPos),2) + Math.Pow((c.YPos - circle.YPos),2)));
-                    if(c != circle && distance <= (c.Radius + circle.Radius) && checkCircleBoundary(poolWidth, poolHeight, circle))
+                    double distance = Math.Ceiling(Math.Sqrt(Math.Pow((c.GetX() - circle.GetX()), 2) + Math.Pow((c.GetY() - circle.GetY()), 2)));
+                    if (c != circle && distance <= (c.GetRadius() + circle.GetRadius()) && checkCircleBoundary(poolWidth, poolHeight, circle))
                     {
-                        circle.XSpeed *= -1;
-                        circle.YSpeed *= -1;
+                        circle.ChangeXDirection();
+                        circle.ChangeYDirection();
                         return true;
                     }
                 }
                 return false;
             }
 
-            private bool CheckStartingPosition(double poolWidth, double poolHeight, Circle circle)
+            public override void UpdateCircleSpeed(LogicCircle circle)
             {
-                if (circlesCollection.Count == 0) return true;
-                foreach (Circle c in circlesCollection)
+                if (circle.GetY() - circle.GetRadius() <= 0 || circle.GetY() + circle.GetRadius() >= DataLayer.GetPoolHeight())
                 {
-                    double distance = Math.Sqrt(Math.Pow((c.XPos - circle.XPos), 2) + Math.Pow((c.YPos - circle.YPos), 2));
-                    if (distance <= (c.Radius + circle.Radius + 5))
-                    {
-                        return false;
-                    }
+                    circle.ChangeYDirection();
                 }
-                return true;
-            }
-
-            public override void UpdateCirlcePosition(double poolWidth, double poolHeight, Circle circle)
-            {
-                    UpdateCircleSpeed(poolWidth, poolHeight, circle);
-                    circle.XPos += circle.XSpeed;
-                    circle.YPos += circle.YSpeed;
-            }
-
-            private void UpdateCircleSpeed(double poolWidth, double poolHeight, Circle circle)
-            {
-                if (circle.YPos - circle.Radius <= 0 || circle.YPos + circle.Radius >= poolHeight) 
+                if (circle.GetX() + circle.GetRadius() >= DataLayer.GetPoolWidth() || circle.GetX() - circle.GetRadius() <= 0)
                 {
-                    circle.YSpeed *= -1;
-                }
-                if (circle.XPos + circle.Radius >= poolWidth || circle.XPos - circle.Radius <= 0)
-                {
-                    circle.XSpeed *= -1;
+                    circle.ChangeXDirection();
                 }
             }
 
-            private bool checkCircleBoundary(double poolWidth, double poolHeight, Circle circle)
+            private bool checkCircleBoundary(double poolWidth, double poolHeight, LogicCircle circle)
             {
-                return circle.YPos - circle.Radius <= 0 || circle.XPos + circle.Radius >= poolWidth || circle.YPos + circle.Radius >= poolHeight || circle.XPos - circle.Radius <= 0 ? false : true;
+                return circle.GetY() - circle.GetRadius() <= 0 || circle.GetX() + circle.GetRadius() >= poolWidth || circle.GetY() + circle.GetRadius() >= poolHeight || circle.GetX() - circle.GetRadius() <= 0 ? false : true;
+            }
+
+            public override void InterruptThreads()
+            {
+                DataLayer.InterruptThreads();
             }
 
             private readonly DataAbstractAPI DataLayer;
-            private Collection<Thread> Threads = new();
-            private Collection<Circle> circlesCollection = new();
+            private Collection<LogicCircle> circlesCollection = new();
         }
     }
 }
