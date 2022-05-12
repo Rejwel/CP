@@ -17,15 +17,20 @@ namespace Model
             PoolAPI = poolAPI ?? PoolAbstractAPI.CreateLayer();
         }
 
-        public ObservableCollection<Circle> GetStartingCirclePositions(int circleCount)
+        public ObservableCollection<LogicCircle> GetStartingCirclePositions(int circleCount)
         {
             Animating = true;
-            return PoolAPI.CreateCircles(_canvasWidth, _canvasHeight, circleCount);
+            return PoolAPI.CreateCircles(_canvasWidth, _canvasHeight, circleCount); ;
         }
 
-        public ObservableCollection<Circle> MoveCircle(ObservableCollection<Circle> circles)
+        public void InterruptThreads()
         {
-            return PoolAPI.UpdateCirlcePosition(_canvasWidth, _canvasHeight, circles);
+            PoolAPI.InterruptThreads();
+        }
+        
+        public void StartThreads()
+        {
+            PoolAPI.StartThreads();
         }
 
         private bool _animating;

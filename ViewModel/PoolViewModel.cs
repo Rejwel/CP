@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Threading;
 
 namespace ViewModel
 {
@@ -14,12 +15,12 @@ namespace ViewModel
     {
         public PoolViewModel()
         {
-            _circles = new();
+            viewModelCircles = new();
             WindowHeight = 640;
             WindowWidth = 1230;
             PoolModel = new PoolModel(WindowWidth, WindowHeight);
-            StartCommand = new CommandBase(() => Start());
-            StopCommand = new CommandBase(() => Stop());
+            StartCommand = new CommandBase(Start);
+            StopCommand = new CommandBase(Stop);
         }
         public ICommand StartCommand { get; set; }
         public ICommand StopCommand { get; set; }
@@ -27,7 +28,7 @@ namespace ViewModel
         private int _count;
         public int Count
         {
-            get { return _count; }
+            get => _count;
             set
             {
                 _count = value;
@@ -37,26 +38,34 @@ namespace ViewModel
 
         private async void Start()
         {
-            Circles = PoolModel.GetStartingCirclePositions(Count);
+            foreach(LogicCircle logicCircle in PoolModel.GetStartingCirclePositions(Count))
+            {
+                ModelCircle circle = new ModelCircle(logicCircle.GetX(), logicCircle.GetY(), logicCircle.GetRadius(), logicCircle.GetColor());
+                viewModelCircles.Add(circle);
+                logicCircle.PropertyChanged += circle.Update!;
+            }
+            PoolModel.StartThreads();
             while (PoolModel.Animating)
             {
-                await Task.Delay(15);
-                Circles = PoolModel.MoveCircle(_circles);
+                await Task.Delay(10);
+                Circles = new ObservableCollection<ModelCircle>(viewModelCircles);
             }
         }
 
         private void Stop()
         {
             PoolModel.Animating = false;
+            PoolModel.InterruptThreads();
+            viewModelCircles.Clear();
         }
 
-        private ObservableCollection<Circle> _circles;
-        public ObservableCollection<Circle> Circles
+        private ObservableCollection<ModelCircle> viewModelCircles;
+        public ObservableCollection<ModelCircle> Circles
         {
-            get => _circles;
+            get => viewModelCircles;
             set
             {
-                _circles = value;
+                viewModelCircles = value;
                 OnPropertyChanged(nameof(Circles));
             }
         }
