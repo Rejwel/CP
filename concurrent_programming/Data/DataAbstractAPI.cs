@@ -17,6 +17,8 @@ namespace Data
         public abstract List<Circle> GetCircles();
 
         public abstract void InterruptThreads();
+        
+        public abstract void StartThreads();
 
         public abstract double GetPoolWidth();
 
@@ -49,6 +51,11 @@ namespace Data
             public override void InterruptThreads()
             {
                 pool.InterruptThreads();
+            }
+            
+            public override void StartThreads()
+            {
+                pool.StartThreads();
             }
 
             public override double GetPoolHeight()

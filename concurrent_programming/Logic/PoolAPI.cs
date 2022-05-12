@@ -16,6 +16,8 @@ namespace Logic
         public abstract ObservableCollection<LogicCircle> CreateCircles(double poolWidth, double poolHeight, int circleCount);
 
         public abstract void InterruptThreads();
+        
+        public abstract void StartThreads();
 
         public abstract void CheckBoundariesCollision(Logic.LogicCircle cirle);
 
@@ -91,6 +93,11 @@ namespace Logic
             public override void InterruptThreads()
             {
                 DataLayer.InterruptThreads();
+            }
+            
+            public override void StartThreads()
+            {
+                DataLayer.StartThreads();
             }
 
             private readonly DataAbstractAPI DataLayer;

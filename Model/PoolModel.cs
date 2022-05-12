@@ -27,6 +27,11 @@ namespace Model
         {
             PoolAPI.InterruptThreads();
         }
+        
+        public void StartThreads()
+        {
+            PoolAPI.StartThreads();
+        }
 
         private bool _animating;
 

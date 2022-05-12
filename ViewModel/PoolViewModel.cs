@@ -44,6 +44,7 @@ namespace ViewModel
                 viewModelCircles.Add(circle);
                 logicCircle.PropertyChanged += circle.Update!;
             }
+            PoolModel.StartThreads();
             while (PoolModel.Animating)
             {
                 await Task.Delay(10);

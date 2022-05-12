@@ -21,7 +21,6 @@ namespace Data
             this.poolWidth = widthOfCanvas;
             CreateBalls(amount);
             CreateThreads();
-            StartThreads();
         }
 
         public void CreateBalls(int amount)
