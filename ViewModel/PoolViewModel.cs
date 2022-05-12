@@ -19,8 +19,8 @@ namespace ViewModel
             WindowHeight = 640;
             WindowWidth = 1230;
             PoolModel = new PoolModel(WindowWidth, WindowHeight);
-            StartCommand = new CommandBase(() => Start());
-            StopCommand = new CommandBase(() => Stop());
+            StartCommand = new CommandBase(Start);
+            StopCommand = new CommandBase(Stop);
         }
         public ICommand StartCommand { get; set; }
         public ICommand StopCommand { get; set; }
@@ -28,7 +28,7 @@ namespace ViewModel
         private int _count;
         public int Count
         {
-            get { return _count; }
+            get => _count;
             set
             {
                 _count = value;

@@ -19,9 +19,9 @@ namespace Logic
         
         public abstract void StartThreads();
 
-        public abstract void CheckBoundariesCollision(Logic.LogicCircle cirle);
+        public abstract void CheckBoundariesCollision(LogicCircle cirle);
 
-        public abstract void CheckCollisionsWithCircles(Logic.LogicCircle cirle);
+        public abstract void CheckCollisionsWithCircles(LogicCircle cirle);
 
         private class PoolAPI : PoolAbstractAPI
         {

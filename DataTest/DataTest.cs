@@ -28,5 +28,14 @@ namespace DataTest
             TestingAPI.CreatePoolWithBalls(10, 500, 1000);
             Assert.AreEqual(TestingAPI.GetPoolHeight(), 1000);
         }
+
+        [TestMethod]
+        public void CirclePosTest()
+        {
+            Circle c = new(10, 15);
+            Assert.AreEqual(c.XPos, 10);
+            Assert.AreEqual(c.YPos, 15);
+        }
+        
     }
 }

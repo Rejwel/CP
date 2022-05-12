@@ -1,3 +1,4 @@
+using Logic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LogicTest
@@ -5,9 +6,12 @@ namespace LogicTest
     [TestClass]
     public class LogicTest
     {
+        private PoolAbstractAPI TestingAPI = PoolAbstractAPI.CreateLayer();
+        
         [TestMethod]
-        public void TestMethod1()
+        public void APITest()
         {
+
         }
     }
 }
