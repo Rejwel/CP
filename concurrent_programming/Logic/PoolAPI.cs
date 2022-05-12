@@ -93,6 +93,7 @@ namespace Logic
             public override void InterruptThreads()
             {
                 DataLayer.InterruptThreads();
+                circlesCollection.Clear();
             }
             
             public override void StartThreads()

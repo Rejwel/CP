@@ -56,6 +56,7 @@ namespace ViewModel
         {
             PoolModel.Animating = false;
             PoolModel.InterruptThreads();
+            viewModelCircles.Clear();
         }
 
         private ObservableCollection<ModelCircle> viewModelCircles;
