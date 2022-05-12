@@ -40,7 +40,9 @@ namespace ViewModel
         {
             foreach(LogicCircle logicCircle in PoolModel.GetStartingCirclePositions(Count))
             {
-                viewModelCircles.Add(new ModelCircle(logicCircle.GetX(),logicCircle.GetY(),logicCircle.GetRadius(),logicCircle));
+                ModelCircle circle = new ModelCircle(logicCircle.GetX(), logicCircle.GetY(), logicCircle.GetRadius(), logicCircle.GetColor());
+                viewModelCircles.Add(circle);
+                logicCircle.PropertyChanged += circle.Update!;
             }
             while (PoolModel.Animating)
             {

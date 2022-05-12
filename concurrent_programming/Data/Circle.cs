@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
 namespace Data
 {
-    public class Circle
+    public class Circle : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler? PropertyChanged;
+
+        protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
         public int Radius { get; }
         public double XPos { get; set; }
         public double YPos { get; set; }
@@ -22,7 +31,7 @@ namespace Data
         public Circle( double XPos, double YPos)
         {
             Random rnd = new();
-            this.Radius = 5;
+            this.Radius = 15;
             this.XPos = XPos;
             this.YPos = YPos;
             this.Color = String.Format("#{0:X6}", rnd.Next(0x1000000));
@@ -41,6 +50,7 @@ namespace Data
         {
             this.XPos += this.XSpeed;
             this.YPos += this.YSpeed;
+            OnPropertyChanged("Move");
         }
 
         public void ChangeDirectionX()

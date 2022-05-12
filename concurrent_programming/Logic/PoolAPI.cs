@@ -34,6 +34,7 @@ namespace Logic
                 foreach (Circle c in circles)
                 {
                     LogicCircle logicCircle = new LogicCircle(c);
+                    c.PropertyChanged += logicCircle.Update!;
                     circlesCollection.Add(logicCircle);
                     logicCircles.Add(logicCircle);                
                 }
