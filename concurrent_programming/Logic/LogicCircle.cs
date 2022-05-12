@@ -42,6 +42,8 @@ namespace Logic
             Data.Circle cirlce = (Data.Circle)s; 
             X = circle.XPos;
             Y = circle.YPos;
+            PoolAbstractAPI.CreateLayer().CheckBoundariesCollision(this);
+            PoolAbstractAPI.CreateLayer().CheckCollisionsWithCircles(this);
         }
 
 

@@ -14,9 +14,12 @@ namespace Logic
         }
 
         public abstract ObservableCollection<LogicCircle> CreateCircles(double poolWidth, double poolHeight, int circleCount);
-        public abstract void UpdateCircleSpeed(LogicCircle logicCircle);
 
         public abstract void InterruptThreads();
+
+        public abstract void CheckBoundariesCollision(Logic.LogicCircle cirle);
+
+        public abstract void CheckCollisionsWithCircles(Logic.LogicCircle cirle);
 
         private class PoolAPI : PoolAbstractAPI
         {
@@ -30,6 +33,8 @@ namespace Logic
                 List<Circle> circles = new();
                 ObservableCollection<LogicCircle> logicCircles = new();
                 DataLayer.CreatePoolWithBalls(circleCount, poolWidth, poolHeight);
+                height = DataLayer.GetPoolHeight();
+                width = DataLayer.GetPoolWidth();
                 circles = DataLayer.GetCircles();
                 foreach (Circle c in circles)
                 {
@@ -41,12 +46,12 @@ namespace Logic
                 return logicCircles;
             }
 
-            private bool CirclesCollision(double poolWidth, double poolHeight, LogicCircle circle)
+            private static bool CirclesCollision(LogicCircle circle)
             {
                 foreach (LogicCircle c in circlesCollection)
                 {
                     double distance = Math.Ceiling(Math.Sqrt(Math.Pow((c.GetX() - circle.GetX()), 2) + Math.Pow((c.GetY() - circle.GetY()), 2)));
-                    if (c != circle && distance <= (c.GetRadius() + circle.GetRadius()) && checkCircleBoundary(poolWidth, poolHeight, circle))
+                    if (c != circle && distance <= (c.GetRadius() + circle.GetRadius()) && checkCircleBoundary(circle))
                     {
                         circle.ChangeXDirection();
                         circle.ChangeYDirection();
@@ -56,21 +61,31 @@ namespace Logic
                 return false;
             }
 
-            public override void UpdateCircleSpeed(LogicCircle circle)
+            public static void UpdateCircleSpeed(LogicCircle circle)
             {
-                if (circle.GetY() - circle.GetRadius() <= 0 || circle.GetY() + circle.GetRadius() >= DataLayer.GetPoolHeight())
+                if (circle.GetY() - circle.GetRadius() <= 0 || circle.GetY() + circle.GetRadius() >= height)
                 {
                     circle.ChangeYDirection();
                 }
-                if (circle.GetX() + circle.GetRadius() >= DataLayer.GetPoolWidth() || circle.GetX() - circle.GetRadius() <= 0)
+                if (circle.GetX() + circle.GetRadius() >= width || circle.GetX() - circle.GetRadius() <= 0)
                 {
                     circle.ChangeXDirection();
                 }
             }
 
-            private bool checkCircleBoundary(double poolWidth, double poolHeight, LogicCircle circle)
+            private static bool checkCircleBoundary(LogicCircle circle)
             {
-                return circle.GetY() - circle.GetRadius() <= 0 || circle.GetX() + circle.GetRadius() >= poolWidth || circle.GetY() + circle.GetRadius() >= poolHeight || circle.GetX() - circle.GetRadius() <= 0 ? false : true;
+                return circle.GetY() - circle.GetRadius() <= 0 || circle.GetX() + circle.GetRadius() >= width || circle.GetY() + circle.GetRadius() >= height || circle.GetX() - circle.GetRadius() <= 0 ? false : true;
+            }
+
+            public override void CheckBoundariesCollision(Logic.LogicCircle cirle)
+            {
+                UpdateCircleSpeed(cirle);
+            }
+
+            public override void CheckCollisionsWithCircles(Logic.LogicCircle cirle)
+            {
+                CirclesCollision(cirle);
             }
 
             public override void InterruptThreads()
@@ -79,7 +94,9 @@ namespace Logic
             }
 
             private readonly DataAbstractAPI DataLayer;
-            private Collection<LogicCircle> circlesCollection = new();
+            private static Collection<LogicCircle> circlesCollection = new();
+            private static double height;
+            private static double width;
         }
     }
 }

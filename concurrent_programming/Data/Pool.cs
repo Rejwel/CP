@@ -30,12 +30,12 @@ namespace Data
             Random rnd = new();
             for (int i = 0; i < amount; i++)
             {
-                int xposition = rnd.Next(10, (int)poolWidth - 10);
-                int yposition = rnd.Next(10, (int)poolHeight - 10);
+                int xposition = rnd.Next(30, (int)poolWidth - 30);
+                int yposition = rnd.Next(30, (int)poolHeight - 30);
                 while (!CanCreate(xposition, yposition))
                 {
-                    xposition = rnd.Next(10, (int)poolWidth - 10);
-                    yposition = rnd.Next(10, (int)poolHeight - 10);
+                    xposition = rnd.Next(30, (int)poolWidth - 30);
+                    yposition = rnd.Next(30, (int)poolHeight - 30);
                 }
                 circles.Add(new Circle(xposition, yposition));
             }
@@ -47,7 +47,7 @@ namespace Data
             foreach (Circle c in circles)
             {
                 double distance = Math.Sqrt(Math.Pow((c.XPos - x), 2) + Math.Pow((c.YPos - y), 2));
-                if (distance <= (2 * c.Radius + 5))
+                if (distance <= (2 * c.Radius + 20))
                 {
                     return false;
                 }
