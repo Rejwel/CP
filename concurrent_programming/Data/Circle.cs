@@ -64,7 +64,8 @@ namespace Data
 
         public void Update(Object s,PropertyChangedEventArgs e)
         {
-            Json.PrettyWrite(new InformationAboutCircle(XPos,YPos,XSpeed,YSpeed), "C:\\Users\\Filip\\Desktop\\Infa4\\wspolbiezne\\test.txt");
+            Json.PrettyWrite(new InformationAboutCircle(XPos,YPos,XSpeed,YSpeed,this.GetHashCode()));
+            Json.YamlTest(new InformationAboutCircle(XPos, YPos, XSpeed, YSpeed, this.GetHashCode()));
         }
     }
 }

@@ -102,6 +102,7 @@ namespace Data
             {
                 t.Start();
             }
+            Json.PrettySimleString("{\n\"kólki\":[\n");
         }
 
         public void InterruptThreads()
@@ -114,6 +115,11 @@ namespace Data
             {
                 t.Interrupt();
             }
+            lock(lockedToSave)
+            {
+                Json.EndWrite();
+                Json.PrettySimleString("]\n}\n");
+            }  
         }
 
         public List<Circle> GetCircles()
@@ -130,6 +136,5 @@ namespace Data
         {
             return poolWidth;
         }
-
     }
 }
