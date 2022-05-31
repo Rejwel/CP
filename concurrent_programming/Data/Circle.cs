@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
@@ -25,8 +26,6 @@ namespace Data
         public int YSpeed { get; set; }
 
         public double Mass { get; set; }
-
-        public Thread Thread { get; set; }
 
         public Circle( double XPos, double YPos)
         {
@@ -61,6 +60,11 @@ namespace Data
         public void ChangeDirectionY()
         {
             this.YSpeed *= -1;
+        }
+
+        public void Update(Object s,PropertyChangedEventArgs e)
+        {
+            Json.PrettyWrite(new InformationAboutCircle(XPos,YPos,XSpeed,YSpeed), "C:\\Users\\Filip\\Desktop\\Infa4\\wspolbiezne\\test.txt");
         }
     }
 }

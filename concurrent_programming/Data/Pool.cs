@@ -10,8 +10,10 @@ namespace Data
     internal class Pool
     {
         private readonly Object locked = new();
+        private readonly Object lockedToSave = new();
         private List<Circle> circles = new();
         private Collection<Thread> threads = new();
+        private Collection<Thread> threadsToSave = new();
         private double poolHeight;
         private double poolWidth;
 
@@ -79,6 +81,14 @@ namespace Data
                     }
                 });
                 threads.Add(t);
+                Thread tToSave = new Thread(() =>
+                {
+                    lock (lockedToSave)
+                    {
+                        c.PropertyChanged += c.Update!;
+                    }
+                });
+                threadsToSave.Add(tToSave);
             }
         }
 
@@ -88,11 +98,19 @@ namespace Data
             {
                 t.Start();
             }
+            foreach(Thread t in threadsToSave)
+            {
+                t.Start();
+            }
         }
 
         public void InterruptThreads()
         {
             foreach(Thread t in threads)
+            {
+                t.Interrupt();
+            }
+            foreach (Thread t in threadsToSave)
             {
                 t.Interrupt();
             }
