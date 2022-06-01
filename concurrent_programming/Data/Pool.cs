@@ -102,7 +102,6 @@ namespace Data
             {
                 t.Start();
             }
-            Json.PrettySimleString("{\n\"kólki\":[\n");
         }
 
         public void InterruptThreads()
@@ -117,8 +116,6 @@ namespace Data
             }
             lock(lockedToSave)
             {
-                Json.EndWrite();
-                Json.PrettySimleString("]\n}\n");
             }  
         }
 
