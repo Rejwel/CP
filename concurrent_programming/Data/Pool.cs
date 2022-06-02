@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -10,8 +11,10 @@ namespace Data
     internal class Pool
     {
         private readonly Object locked = new();
+        private readonly Object lockedToSave = new();
         private List<Circle> circles = new();
         private Collection<Thread> threads = new();
+        private Collection<Thread> threadsToSave = new();
         private double poolHeight;
         private double poolWidth;
 
@@ -60,31 +63,49 @@ namespace Data
             {
                 Thread t = new Thread(() =>
                 {
+                    Stopwatch timer = new Stopwatch();
                     while (true)
                     {
                         try
                         {
-                            Thread.Sleep(15);
+                            timer.Start();
                             lock (locked)
                             {
                                 c.Move();
-                            
                             }
+                            timer.Stop();
+
+                            if (15 - timer.ElapsedMilliseconds > 0)
+                            {
+                                Thread.Sleep(15 - (int)timer.ElapsedMilliseconds);
+                            }
+                            timer.Reset();
                         }
                         catch (Exception e)
                         {
                             break;
                         }
-
                     }
                 });
                 threads.Add(t);
+                Thread tToSave = new Thread(() =>
+                {
+                    lock (lockedToSave)
+                    {
+                        c.PropertyChanged += c.Update!;
+                    }
+                });
+                threadsToSave.Add(tToSave);
             }
         }
 
         public void StartThreads()
         {
             foreach(Thread t in threads)
+            {
+                t.Start();
+            }
+            foreach(Thread t in threadsToSave)
             {
                 t.Start();
             }
@@ -96,6 +117,13 @@ namespace Data
             {
                 t.Interrupt();
             }
+            foreach (Thread t in threadsToSave)
+            {
+                t.Interrupt();
+            }
+            lock(lockedToSave)
+            {
+            }  
         }
 
         public List<Circle> GetCircles()
@@ -112,6 +140,5 @@ namespace Data
         {
             return poolWidth;
         }
-
     }
 }
