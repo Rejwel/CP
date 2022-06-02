@@ -36,6 +36,7 @@ namespace Data
             toWrite += "  - Ypos: " + YPos + "\n";
             toWrite += "  - XSpeed: " + XSpeed + "\n";
             toWrite += "  - YSpeed: " + YSpeed + "\n";
+            toWrite += "  - Date: " + Date + "\n";
             return toWrite;
         }
     }

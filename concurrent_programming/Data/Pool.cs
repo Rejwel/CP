@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -62,22 +63,28 @@ namespace Data
             {
                 Thread t = new Thread(() =>
                 {
+                    Stopwatch timer = new Stopwatch();
                     while (true)
                     {
                         try
                         {
-                            Thread.Sleep(15);
+                            timer.Start();
                             lock (locked)
                             {
                                 c.Move();
-                            
                             }
+                            timer.Stop();
+
+                            if (15 - timer.ElapsedMilliseconds > 0)
+                            {
+                                Thread.Sleep(15 - (int)timer.ElapsedMilliseconds);
+                            }
+                            timer.Reset();
                         }
                         catch (Exception e)
                         {
                             break;
                         }
-
                     }
                 });
                 threads.Add(t);
