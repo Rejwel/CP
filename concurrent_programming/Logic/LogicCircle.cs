@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class LogicCircle : INotifyPropertyChanged
+    internal class LogicCircle : AbstractLogicCircle, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public override event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -37,7 +37,7 @@ namespace Logic
             }
         }
 
-        public void Update(Object s, PropertyChangedEventArgs e)
+        public override void Update(Object s, PropertyChangedEventArgs e)
         {
             Data.AbstractCricle cirlce = (Data.AbstractCricle)s; 
             X = circle.Position.X;
@@ -54,27 +54,27 @@ namespace Logic
             circle = c;
         }
 
-        public void ChangeXDirection()
+        public override void ChangeXDirection()
         {
             circle.ChangeDirectionX();
         }
 
-        public void ChangeYDirection()
+        public override  void ChangeYDirection()
         {
             circle.ChangeDirectionY();
         }
 
-        public double GetX()
+        public override double GetX()
         {
             return X;
         }
 
-        public double GetY()
+        public override double GetY()
         {
             return Y;
         }
 
-        public double GetRadius()
+        public override double GetRadius()
         {
             return circle.Radius;
         }

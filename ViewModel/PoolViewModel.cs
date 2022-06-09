@@ -38,7 +38,7 @@ namespace ViewModel
 
         private async void Start()
         {
-            foreach(LogicCircle logicCircle in PoolModel.GetStartingCirclePositions(Count))
+            foreach(AbstractLogicCircle logicCircle in PoolModel.GetStartingCirclePositions(Count))
             {
                 ModelCircle circle = new ModelCircle(logicCircle.GetX(), logicCircle.GetY(), logicCircle.GetRadius());
                 viewModelCircles.Add(circle);

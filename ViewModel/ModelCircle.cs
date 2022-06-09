@@ -29,9 +29,9 @@ namespace ViewModel
 
         public void Update(Object s, PropertyChangedEventArgs e)
         {
-            Logic.LogicCircle circle = (Logic.LogicCircle)s;
-            X = circle.X;
-            Y = circle.Y;
+            Logic.AbstractLogicCircle circle = (Logic.AbstractLogicCircle) s;
+            X = circle.GetX();
+            Y = circle.GetY();
         }
     }
 }

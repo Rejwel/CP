@@ -13,15 +13,15 @@ namespace Logic
             return new PoolAPI(data ?? DataAbstractAPI.CreateAPI());
         }
 
-        public abstract ObservableCollection<LogicCircle> CreateCircles(double poolWidth, double poolHeight, int circleCount);
+        public abstract ObservableCollection<AbstractLogicCircle> CreateCircles(double poolWidth, double poolHeight, int circleCount);
 
         public abstract void InterruptThreads();
         
         public abstract void StartThreads();
 
-        public abstract void CheckBoundariesCollision(LogicCircle cirle);
+        public abstract void CheckBoundariesCollision(AbstractLogicCircle cirle);
 
-        public abstract void CheckCollisionsWithCircles(LogicCircle cirle);
+        public abstract void CheckCollisionsWithCircles(AbstractLogicCircle cirle);
 
         private class PoolAPI : PoolAbstractAPI
         {
@@ -30,17 +30,17 @@ namespace Logic
                 DataLayer = dataLayer;
             }
 
-            public override ObservableCollection<LogicCircle> CreateCircles(double poolWidth, double poolHeight, int circleCount)
+            public override ObservableCollection<AbstractLogicCircle> CreateCircles(double poolWidth, double poolHeight, int circleCount)
             {
                 List<AbstractCricle> circles = new();
-                ObservableCollection<LogicCircle> logicCircles = new();
+                ObservableCollection<AbstractLogicCircle> logicCircles = new();
                 DataLayer.CreatePoolWithBalls(circleCount, poolWidth, poolHeight);
                 height = DataLayer.GetPoolHeight();
                 width = DataLayer.GetPoolWidth();
                 circles = DataLayer.GetCircles();
                 foreach (AbstractCricle c in circles)
                 {
-                    LogicCircle logicCircle = new LogicCircle(c);
+                    AbstractLogicCircle logicCircle = AbstractLogicCircle.CreateCircle(c);
                     c.PropertyChanged += logicCircle.Update!;
                     circlesCollection.Add(logicCircle);
                     logicCircles.Add(logicCircle);                
@@ -48,9 +48,9 @@ namespace Logic
                 return logicCircles;
             }
 
-            private static bool CirclesCollision(LogicCircle circle)
+            private static bool CirclesCollision(AbstractLogicCircle circle)
             {
-                foreach (LogicCircle c in circlesCollection)
+                foreach (AbstractLogicCircle c in circlesCollection)
                 {
                     double distance = Math.Ceiling(Math.Sqrt(Math.Pow((c.GetX() - circle.GetX()), 2) + Math.Pow((c.GetY() - circle.GetY()), 2)));
                     if (c != circle && distance <= (c.GetRadius() + circle.GetRadius()) && checkCircleBoundary(circle))
@@ -63,7 +63,7 @@ namespace Logic
                 return false;
             }
 
-            public static void UpdateCircleSpeed(LogicCircle circle)
+            public static void UpdateCircleSpeed(AbstractLogicCircle circle)
             {
                 if (circle.GetY() - circle.GetRadius() <= 0 || circle.GetY() + circle.GetRadius() >= height)
                 {
@@ -75,17 +75,17 @@ namespace Logic
                 }
             }
 
-            private static bool checkCircleBoundary(LogicCircle circle)
+            private static bool checkCircleBoundary(AbstractLogicCircle circle)
             {
                 return circle.GetY() - circle.GetRadius() <= 0 || circle.GetX() + circle.GetRadius() >= width || circle.GetY() + circle.GetRadius() >= height || circle.GetX() - circle.GetRadius() <= 0 ? false : true;
             }
 
-            public override void CheckBoundariesCollision(Logic.LogicCircle cirle)
+            public override void CheckBoundariesCollision(Logic.AbstractLogicCircle cirle)
             {
                 UpdateCircleSpeed(cirle);
             }
 
-            public override void CheckCollisionsWithCircles(Logic.LogicCircle cirle)
+            public override void CheckCollisionsWithCircles(Logic.AbstractLogicCircle cirle)
             {
                 CirclesCollision(cirle);
             }
@@ -102,7 +102,7 @@ namespace Logic
             }
 
             private readonly DataAbstractAPI DataLayer;
-            private static Collection<LogicCircle> circlesCollection = new();
+            private static Collection<AbstractLogicCircle> circlesCollection = new();
             private static double height;
             private static double width;
         }
