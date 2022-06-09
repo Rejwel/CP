@@ -30,8 +30,8 @@ namespace ViewModel
         public void Update(Object s, PropertyChangedEventArgs e)
         {
             Logic.AbstractLogicCircle circle = (Logic.AbstractLogicCircle) s;
-            X = circle.GetX();
-            Y = circle.GetY();
+            X = circle.Postion.X;
+            Y = circle.Postion.Y;
         }
     }
 }

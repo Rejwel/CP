@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
@@ -16,32 +17,22 @@ namespace Logic
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        private double _x;
-        public double X
-        {
-            get => _x;
-            set
+
+        private Vector2 _position;
+        public override Vector2 Postion 
+        { 
+            get => _position;
+            internal set
             {
-                _x = value;
-                OnPropertyChanged("X");
-            }
-        }
-        private double _y;
-        public double Y 
-        {
-            get => _y;
-            set
-            {
-                _y = value;
-                OnPropertyChanged("Y");
+                _position = value;
+                OnPropertyChanged("Position");
             }
         }
 
         public override void Update(Object s, PropertyChangedEventArgs e)
         {
-            Data.AbstractCricle cirlce = (Data.AbstractCricle)s; 
-            X = circle.Position.X;
-            Y = circle.Position.Y;
+            Data.AbstractCricle cir = (Data.AbstractCricle)s;
+            Postion = cir.Position;
             PoolAbstractAPI.CreateLayer().CheckBoundariesCollision(this);
             PoolAbstractAPI.CreateLayer().CheckCollisionsWithCircles(this);
         }
@@ -62,16 +53,6 @@ namespace Logic
         public override  void ChangeYDirection()
         {
             circle.ChangeDirectionY();
-        }
-
-        public override double GetX()
-        {
-            return X;
-        }
-
-        public override double GetY()
-        {
-            return Y;
         }
 
         public override double GetRadius()

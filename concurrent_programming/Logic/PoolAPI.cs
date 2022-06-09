@@ -52,7 +52,7 @@ namespace Logic
             {
                 foreach (AbstractLogicCircle c in circlesCollection)
                 {
-                    double distance = Math.Ceiling(Math.Sqrt(Math.Pow((c.GetX() - circle.GetX()), 2) + Math.Pow((c.GetY() - circle.GetY()), 2)));
+                    double distance = Math.Ceiling(Math.Sqrt(Math.Pow((c.Postion.X - circle.Postion.X), 2) + Math.Pow((c.Postion.Y - circle.Postion.Y), 2)));
                     if (c != circle && distance <= (c.GetRadius() + circle.GetRadius()) && checkCircleBoundary(circle))
                     {
                         circle.ChangeXDirection();
@@ -65,11 +65,11 @@ namespace Logic
 
             public static void UpdateCircleSpeed(AbstractLogicCircle circle)
             {
-                if (circle.GetY() - circle.GetRadius() <= 0 || circle.GetY() + circle.GetRadius() >= height)
+                if (circle.Postion.Y - circle.GetRadius() <= 0 || circle.Postion.Y + circle.GetRadius() >= height)
                 {
                     circle.ChangeYDirection();
                 }
-                if (circle.GetX() + circle.GetRadius() >= width || circle.GetX() - circle.GetRadius() <= 0)
+                if (circle.Postion.X + circle.GetRadius() >= width || circle.Postion.X - circle.GetRadius() <= 0)
                 {
                     circle.ChangeXDirection();
                 }
@@ -77,7 +77,7 @@ namespace Logic
 
             private static bool checkCircleBoundary(AbstractLogicCircle circle)
             {
-                return circle.GetY() - circle.GetRadius() <= 0 || circle.GetX() + circle.GetRadius() >= width || circle.GetY() + circle.GetRadius() >= height || circle.GetX() - circle.GetRadius() <= 0 ? false : true;
+                return circle.Postion.Y - circle.GetRadius() <= 0 || circle.Postion.X + circle.GetRadius() >= width || circle.Postion.Y + circle.GetRadius() >= height || circle.Postion.X - circle.GetRadius() <= 0 ? false : true;
             }
 
             public override void CheckBoundariesCollision(Logic.AbstractLogicCircle cirle)
