@@ -3,13 +3,14 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
 namespace Data
 {
-    public class Circle : INotifyPropertyChanged
+    class Circle : AbstractCricle, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler? PropertyChanged;
 
@@ -18,53 +19,38 @@ namespace Data
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
 
-        public int Radius { get; }
-        public double XPos { get; set; }
-        public double YPos { get; set; }
-        public string Color { get; set; }
-        public int XSpeed { get; set; }
-        public int YSpeed { get; set; }
-
-        public double Mass { get; set; }
-
-        public Circle( double XPos, double YPos)
+        public Circle(Vector2 position)
         {
             Random rnd = new();
-            this.Radius = 15;
-            this.XPos = XPos;
-            this.YPos = YPos;
-            this.Color = String.Format("#{0:X6}", rnd.Next(0x1000000));
-            this.Mass = 5.0;
-            while (XSpeed == 0)
+            Radius = 15;
+            Position = position;
+            Speed = new();
+            //this.Color = String.Format("#{0:X6}", rnd.Next(0x1000000));
+            while (Speed.X == 0 || Speed.Y == 0)
             {
-                XSpeed = rnd.Next(-3, 4);
-            }
-            while (YSpeed == 0)
-            {
-                YSpeed = rnd.Next(-3, 4);
+                Speed = new(rnd.Next(-3, 4));
             }
         }
 
-        public void Move()
+        public override void Move()
         {
-            this.XPos += this.XSpeed;
-            this.YPos += this.YSpeed;
+            Position += Speed;
             OnPropertyChanged("Move");
         }
 
-        public void ChangeDirectionX()
+        public override void ChangeDirectionX()
         {
-            this.XSpeed *= -1;
+            Speed = new Vector2(Speed.X * -1, Speed.Y);
         }
 
-        public void ChangeDirectionY()
+        public override void ChangeDirectionY()
         {
-            this.YSpeed *= -1;
+            Speed = new Vector2(Speed.X, Speed.Y * -1);
         }
 
         public void Update(Object s,PropertyChangedEventArgs e)
         {
-            Logger.GetInstance().SaveDataAsYaml(new InformationAboutCircle(XPos, YPos, XSpeed, YSpeed, this.GetHashCode()));
+            Logger.GetInstance().SaveDataAsYaml(new InformationAboutCircle(Position.X, Position.Y, Speed.X, Speed.Y, this.GetHashCode()));
         }
     }
 }

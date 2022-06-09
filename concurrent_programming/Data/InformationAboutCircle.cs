@@ -12,11 +12,11 @@ namespace Data
     {
         public double XPos { get; set; }
         public double YPos { get; set; }
-        public int XSpeed { get; set; }
-        public int YSpeed { get; set; }
+        public double XSpeed { get; set; }
+        public double YSpeed { get; set; }
         public int Hash { get; set; }
         public string Date { get; set; }
-        public InformationAboutCircle(double XPos,double YPos,int XSpeed, int YSpeed,int Hash)
+        public InformationAboutCircle(double XPos,double YPos, double XSpeed, double YSpeed,int Hash)
         {
             this.XPos = XPos;
             this.YPos = YPos;   
