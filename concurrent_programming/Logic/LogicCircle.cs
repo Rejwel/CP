@@ -17,6 +17,7 @@ namespace Logic
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+       
 
         private Vector2 _position;
         public override Vector2 Postion 

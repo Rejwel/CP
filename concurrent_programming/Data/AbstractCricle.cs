@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.Linq;
 using System.Numerics;
 using System.Text;
@@ -15,7 +16,7 @@ namespace Data
         public Vector2 Position { get; internal set; }
         public Vector2 Speed { get; internal set;  }
 
-        public abstract void Move();
+        internal abstract void Move(Stopwatch timer);
         public abstract void ChangeDirectionX();
         public abstract void ChangeDirectionY();
         public abstract void Update(Object s, PropertyChangedEventArgs e);

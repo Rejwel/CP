@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Numerics;
@@ -31,9 +32,10 @@ namespace Data
             }
         }
 
-        public override void Move()
+        internal override void Move(Stopwatch timer)
         {
-            Position += Speed;
+            int multiplier = (int)(timer.ElapsedMilliseconds / 1000);
+            Position += new Vector2(Speed.X + multiplier, Speed.Y + multiplier);
             OnPropertyChanged("Move");
         }
 

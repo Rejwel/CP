@@ -65,22 +65,18 @@ namespace Data
                 Thread t = new Thread(() =>
                 {
                     Stopwatch timer = new Stopwatch();
+                    timer.Start();
                     while (true)
                     {
                         try
                         {
-                            timer.Start();
                             lock (locked)
                             {
-                                c.Move();
+                                c.Move(timer);
                             }
-                            timer.Stop();
-
-                            if (15 - timer.ElapsedMilliseconds > 0)
-                            {
-                                Thread.Sleep(15 - (int)timer.ElapsedMilliseconds);
-                            }
+                            Thread.Sleep(15);
                             timer.Reset();
+                            timer.Start();
                         }
                         catch (Exception e)
                         {
