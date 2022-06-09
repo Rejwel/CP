@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading;
 
@@ -12,7 +13,7 @@ namespace Data
     {
         private readonly Object locked = new();
         private readonly Object lockedToSave = new();
-        private List<Circle> circles = new();
+        private List<AbstractCricle> circles = new();
         private Collection<Thread> threads = new();
         private Collection<Thread> threadsToSave = new();
         private double poolHeight;
@@ -39,16 +40,16 @@ namespace Data
                     xposition = rnd.Next(30, (int)poolWidth - 30);
                     yposition = rnd.Next(30, (int)poolHeight - 30);
                 }
-                circles.Add(new Circle(xposition, yposition));
+                circles.Add(AbstractCricle.CreateCircle(new Vector2(xposition, yposition)));
             }
         }
 
         private bool CanCreate(int x, int y)
         {
             if (circles.Count == 0) return true;
-            foreach (Circle c in circles)
+            foreach (AbstractCricle c in circles)
             {
-                double distance = Math.Sqrt(Math.Pow((c.XPos - x), 2) + Math.Pow((c.YPos - y), 2));
+                double distance = Math.Sqrt(Math.Pow((c.Position.X - x), 2) + Math.Pow((c.Position.Y - y), 2));
                 if (distance <= (2 * c.Radius + 20))
                 {
                     return false;
@@ -59,7 +60,7 @@ namespace Data
 
         private void CreateThreads()
         {
-            foreach(Circle c in circles)
+            foreach(AbstractCricle c in circles)
             {
                 Thread t = new Thread(() =>
                 {
@@ -126,7 +127,7 @@ namespace Data
             }  
         }
 
-        public List<Circle> GetCircles()
+        public List<AbstractCricle> GetCircles()
         {
             return circles;
         }

@@ -39,17 +39,17 @@ namespace Logic
 
         public void Update(Object s, PropertyChangedEventArgs e)
         {
-            Data.Circle cirlce = (Data.Circle)s; 
-            X = circle.XPos;
-            Y = circle.YPos;
+            Data.AbstractCricle cirlce = (Data.AbstractCricle)s; 
+            X = circle.Position.X;
+            Y = circle.Position.Y;
             PoolAbstractAPI.CreateLayer().CheckBoundariesCollision(this);
             PoolAbstractAPI.CreateLayer().CheckCollisionsWithCircles(this);
         }
 
 
-        private readonly Data.Circle circle;
+        private readonly Data.AbstractCricle circle;
         
-        public LogicCircle(Data.Circle c)
+        public LogicCircle(Data.AbstractCricle c)
         {
             circle = c;
         }
@@ -77,11 +77,6 @@ namespace Logic
         public double GetRadius()
         {
             return circle.Radius;
-        }
-
-        public String GetColor()
-        {
-            return circle.Color;
         }
     }
 }

@@ -32,13 +32,13 @@ namespace Logic
 
             public override ObservableCollection<LogicCircle> CreateCircles(double poolWidth, double poolHeight, int circleCount)
             {
-                List<Circle> circles = new();
+                List<AbstractCricle> circles = new();
                 ObservableCollection<LogicCircle> logicCircles = new();
                 DataLayer.CreatePoolWithBalls(circleCount, poolWidth, poolHeight);
                 height = DataLayer.GetPoolHeight();
                 width = DataLayer.GetPoolWidth();
                 circles = DataLayer.GetCircles();
-                foreach (Circle c in circles)
+                foreach (AbstractCricle c in circles)
                 {
                     LogicCircle logicCircle = new LogicCircle(c);
                     c.PropertyChanged += logicCircle.Update!;

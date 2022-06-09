@@ -12,7 +12,7 @@ namespace Data
 {
     class Circle : AbstractCricle, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public override event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
@@ -25,7 +25,6 @@ namespace Data
             Radius = 15;
             Position = position;
             Speed = new();
-            //this.Color = String.Format("#{0:X6}", rnd.Next(0x1000000));
             while (Speed.X == 0 || Speed.Y == 0)
             {
                 Speed = new(rnd.Next(-3, 4));
@@ -48,7 +47,7 @@ namespace Data
             Speed = new Vector2(Speed.X, Speed.Y * -1);
         }
 
-        public void Update(Object s,PropertyChangedEventArgs e)
+        public override void Update(Object s,PropertyChangedEventArgs e)
         {
             Logger.GetInstance().SaveDataAsYaml(new InformationAboutCircle(Position.X, Position.Y, Speed.X, Speed.Y, this.GetHashCode()));
         }

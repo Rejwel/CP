@@ -18,12 +18,13 @@ namespace ViewModel
         public String Color { get; set; }
     
 
-        public ModelCircle(double x, double y, double radius, String color)
+        public ModelCircle(double x, double y, double radius)
         {
+            Random rnd = new();
             this.X = x; 
             this.Y = y;
             this.Radius = radius;
-            this.Color = color;
+            this.Color = String.Format("#{0:X6}", rnd.Next(0x1000000));
         }
 
         public void Update(Object s, PropertyChangedEventArgs e)
