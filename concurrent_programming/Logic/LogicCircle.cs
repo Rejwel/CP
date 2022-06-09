@@ -2,86 +2,63 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace Logic
 {
-    public class LogicCircle : INotifyPropertyChanged
+    internal class LogicCircle : AbstractLogicCircle, INotifyPropertyChanged
     {
-        public event PropertyChangedEventHandler? PropertyChanged;
+        public override event PropertyChangedEventHandler? PropertyChanged;
 
         protected void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-        private double _x;
-        public double X
-        {
-            get => _x;
-            set
+       
+
+        private Vector2 _position;
+        public override Vector2 Postion 
+        { 
+            get => _position;
+            internal set
             {
-                _x = value;
-                OnPropertyChanged("X");
-            }
-        }
-        private double _y;
-        public double Y 
-        {
-            get => _y;
-            set
-            {
-                _y = value;
-                OnPropertyChanged("Y");
+                _position = value;
+                OnPropertyChanged("Position");
             }
         }
 
-        public void Update(Object s, PropertyChangedEventArgs e)
+        public override void Update(Object s, PropertyChangedEventArgs e)
         {
-            Data.Circle cirlce = (Data.Circle)s; 
-            X = circle.XPos;
-            Y = circle.YPos;
+            Data.AbstractCricle cir = (Data.AbstractCricle)s;
+            Postion = cir.Position;
             PoolAbstractAPI.CreateLayer().CheckBoundariesCollision(this);
             PoolAbstractAPI.CreateLayer().CheckCollisionsWithCircles(this);
         }
 
 
-        private readonly Data.Circle circle;
+        private readonly Data.AbstractCricle circle;
         
-        public LogicCircle(Data.Circle c)
+        public LogicCircle(Data.AbstractCricle c)
         {
             circle = c;
         }
 
-        public void ChangeXDirection()
+        public override void ChangeXDirection()
         {
             circle.ChangeDirectionX();
         }
 
-        public void ChangeYDirection()
+        public override  void ChangeYDirection()
         {
             circle.ChangeDirectionY();
         }
 
-        public double GetX()
-        {
-            return X;
-        }
-
-        public double GetY()
-        {
-            return Y;
-        }
-
-        public double GetRadius()
+        public override double GetRadius()
         {
             return circle.Radius;
-        }
-
-        public String GetColor()
-        {
-            return circle.Color;
         }
     }
 }

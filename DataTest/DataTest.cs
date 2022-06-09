@@ -1,4 +1,5 @@
 using Data;
+using System.Numerics;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace DataTest
@@ -32,9 +33,9 @@ namespace DataTest
         [TestMethod]
         public void CirclePosTest()
         {
-            Circle c = new(10, 15);
-            Assert.AreEqual(c.XPos, 10);
-            Assert.AreEqual(c.YPos, 15);
+            AbstractCricle c = AbstractCricle.CreateCircle(new Vector2(10, 15));
+            Assert.AreEqual(c.Position.X, 10);
+            Assert.AreEqual(c.Position.Y, 15);
         }
         
     }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Numerics;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -9,28 +10,28 @@ namespace ViewModel
 {
     public class ModelCircle : ViewModelBase
     {
-        public double X { get; set; }
+        public float X { get => Postition.X; }
+        public float Y { get => Postition.Y; }
 
-        public double Y { get; set; }
+        public Vector2 Postition { get; internal set; }
 
-        public double Radius { get; set; }
+        public double Radius { get; internal set; }
 
-        public String Color { get; set; }
+        public String Color { get; internal set; }
     
 
-        public ModelCircle(double x, double y, double radius, String color)
+        public ModelCircle(double x, double y, double radius)
         {
-            this.X = x; 
-            this.Y = y;
+            Random rnd = new();
+            this.Postition = new Vector2((float)x, (float)y);
             this.Radius = radius;
-            this.Color = color;
+            this.Color = String.Format("#{0:X6}", rnd.Next(0x1000000));
         }
 
         public void Update(Object s, PropertyChangedEventArgs e)
         {
-            Logic.LogicCircle circle = (Logic.LogicCircle)s;
-            X = circle.X;
-            Y = circle.Y;
+            Logic.AbstractLogicCircle circle = (Logic.AbstractLogicCircle) s;
+            this.Postition = circle.Postion;
         }
     }
 }
